@@ -234,7 +234,7 @@ def borg_check_repository():
 
     # Check if there is a valid repository, otherwise 'borg init' needs to first be used.
     cmd = ['borg', 'check', '--repository-only']
-    cmd_return = subprocess.run(cmd, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode
+    cmd_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode
     logging.debug('Borg check command returned {}'.format(cmd_return))
 
     # Check if the command was successful
@@ -256,7 +256,7 @@ def borg_perform_backup():
     result = False
 
     # Assemble the borg command for creating a new backup archive and run it.
-    cmd = ['borg', 'create', '--verbose', '--stats', '--show-rc', '--compression', 'lz4',
+    cmd = ['borg', 'create', '--verbose', '--stats', '--compression', 'lz4',
            '--exclude-caches', '--exclude', '/home/*/.cache/*', '::{hostname}-{now:%Y-%m-%dT%H:%M:%S}', '/home']
     cmd_return = subprocess.run(cmd).returncode
     logging.debug('Borg create command returned {}'.format(cmd_return))
@@ -280,7 +280,7 @@ def borg_perform_prune():
     result = True
 
     # Assemble the borg command for pruning show archives that are no longer needed and run it.
-    cmd = ['borg', 'prune', '--verbose', '--list', '--prefix', '{hostname}-', '--show-rc',
+    cmd = ['borg', 'prune', '--verbose', '--list', '--prefix', '{hostname}-',
            '--keep-daily', '7', '--keep-weekly', '4', '--keep-monthly', '6']
     cmd_return = subprocess.run(cmd).returncode
     logging.debug('Borg prune command returned {}'.format(cmd_return))
@@ -316,7 +316,7 @@ def borg_perform_restore():
         os.chdir('/')
 
         # Assemble the borg command for extracting the most recent backup archive and run it.
-        cmd = ['borg', 'extract', '--verbose', '--list', '--show-rc', '::{}'.format(archive_to_restore)]
+        cmd = ['borg', 'extract', '--verbose', '--list', '::{}'.format(archive_to_restore)]
         cmd_return = subprocess.run(cmd).returncode
         logging.debug('Borg extract command returned {}'.format(cmd_return))
 
@@ -342,9 +342,9 @@ def borg_get_most_recent_archive_name():
 
     # Assemble the borg command for listing the most recent archive.
     cmd = ['borg', 'list', '--verbose', '--prefix', '{hostname}-', '--last', '1']
-    cmd_result = subprocess.run(cmd, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmd_result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Get the first line from the standard output, which should include the archive name in the first part.
-    archive_listing = cmd_result.stdout.strip().split('\r\n')[0:1][0]
+    archive_listing = cmd_result.stdout.decode('utf-8').strip().split('\r\n')[0:1][0]
     # Get the first part of the line, which is the archive name.
     archive_name = archive_listing.split(' ')[0:1][0]
     logging.debug('Borg list detected most recent archive: {}'.format(archive_name))
@@ -381,7 +381,7 @@ def device_mount(device_name, mount_dir):
     if result:
         # Run the command to mount the device.
         cmd = ['mount', os.path.normpath(device_name), mount_dir]
-        cmd_return = subprocess.run(cmd, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode
+        cmd_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode
         logging.debug('Mount command for device {} to directory {} returned {}'.format(device_name, mount_dir,
                       cmd_return))
 
@@ -418,7 +418,7 @@ def device_unmount(device_name, mount_dir):
         time.sleep(2)
         # Run the command to unmount the specified directory
         cmd = ['umount', mount_dir]
-        cmd_return = subprocess.run(cmd, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode
+        cmd_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode
         logging.debug('Unmount command for directory {} returned {}'.format(mount_dir, cmd_return))
 
         # Check the command return code and update the result accordingly.
@@ -450,11 +450,11 @@ def device_is_mounted(device_name, mount_dir):
     # Continue with checking the mountpoint if all is okay so far.
     if result:
         cmd = ['lsblk', '-o', 'MOUNTPOINT', '-nr', os.path.normpath(device_name)]
-        cmd_result = subprocess.run(cmd, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cmd_result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Check if the command was successful before processing its output.
         if cmd_result.returncode == 0:
-            mounted_dir = cmd_result.stdout.strip().split('\r\n')[0:1][0]
+            mounted_dir = cmd_result.stdout.decode('utf-8').strip().split('\r\n')[0:1][0]
             logging.debug('Device {} reports to be mounted at {}'.format(device_name, mounted_dir))
             # Compare the mount directories to check if they match. Make sure to remove trailing
             # slashes at the end to make sure they are similar.
