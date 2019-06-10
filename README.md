@@ -80,7 +80,7 @@ a daily CRON job. Example for Debian/Ubuntu based systems:
   parameters for you situation:
     ```
     # run at 1:23am every day
-    23 01 * * * root borgbahm /dev/sdc /mnt/backup borgrepo Pa55w0rd >>/var/log/borgbahmrun
+    23 01 * * * root borgbahm /dev/sdc /mnt/backup borgrepo Pa55w0rd >>/var/log/borgbahmrun 2>&1
     ```
 * Restart the CRON daemon to make sure the new CRON job is active: `sudo systemctl restart cron`.
 
