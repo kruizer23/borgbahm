@@ -75,9 +75,9 @@ def main():
                                      "Run this program on a daily\r\nbasis to create incremental backups. It " +
                                      "automatically maintains 7 daily,\r\n4 weekly and 6 monthly backup archives.",
                                      epilog="Example for creating a new backup archive:\r\n" +
-                                     "\tsudo borgbahm.py /dev/sdc /mnt/backup borgrepo Pa55w0rd\r\n\r\n" +
+                                     "\tsudo borgbahm /dev/sdc /mnt/backup borgrepo Pa55w0rd\r\n\r\n" +
                                      "Example for restoring from the most recent backup archive:\r\n" +
-                                     "\tsudo borgbahm.py --restore /dev/sdc /mnt/backup borgrepo Pa55w0rd\r\n\r\n" +
+                                     "\tsudo borgbahm --restore /dev/sdc /mnt/backup borgrepo Pa55w0rd\r\n\r\n" +
                                      "It is assumed that the 'mountdir' exists and that the 'borgrepo' on the " +
                                      "device\r\nis initialized. To initialize a borg repository use:\r\n" +
                                      "\tsudo borg init --encryption=repokey /mnt/backup/borgrepo\r\n\r\n",

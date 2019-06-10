@@ -94,7 +94,7 @@ Example:
 * `sudo borgbahm --restore /dev/sdc /mnt/backup borgrepo Pa55w0rd`
  
 Note that Borgbahm creates normal Borg backup archives. In case you would like to restore files from another
-backup archive, instead of the most recent one, you can use all the feature from Borg backup. Refer to the
+backup archive, instead of the most recent one, you can use all the features from Borg backup. Refer to the
 [Borg backup documentation](https://borgbackup.readthedocs.io/en/stable/quickstart.html) for more info.
 
 ### Additional help
@@ -102,7 +102,7 @@ backup archive, instead of the most recent one, you can use all the feature from
 For additional details on Borgbahm, run the program with the `--help` parameter:
 
 ```
-usage: borgbahm.py [-h] [-d] [-r] [-q] device mountdir reponame passphrase
+usage: borgbahm [-h] [-d] [-r] [-q] device mountdir reponame passphrase
 
 Manage backups of the /home directory with borg. Run this program on a daily
 basis to create incremental backups. It automatically maintains 7 daily,
@@ -121,13 +121,12 @@ optional arguments:
   -q, --quiet    enable quiet mode for less output.
 
 Example for creating a new backup archive:
-	sudo borgbahm.py /dev/sdc /mnt/backup borgrepo Pa55w0rd
+	sudo borgbahm /dev/sdc /mnt/backup borgrepo Pa55w0rd
 
 Example for restoring from the most recent backup archive:
-	sudo borgbahm.py --restore /dev/sdc /mnt/backup borgrepo Pa55w0rd
+	sudo borgbahm --restore /dev/sdc /mnt/backup borgrepo Pa55w0rd
 
 It is assumed that the 'mountdir' exists and that the 'borgrepo' on the device
 is initialized. To initialize a borg repository use:
 	sudo borg init --encryption=repokey /mnt/backup/borgrepo
-
 ```
