@@ -142,8 +142,8 @@ def main():
             logging.error('The borg environment could not be initialized. Verify that borg is installed and ' +
                           'the repository is created.')
 
-    # Perform a consistency check of the borg repository.
-    if result == RESULT_OK:
+    # Perform a consistency check of the borg repository, when no restore operation was requested.
+    if result == RESULT_OK and not args.restore_mode:
         if not args.quiet_mode:
             display_info('Checking {} repository consistency.'.format(borg_repo_url))
         if not borg_check_repository():
