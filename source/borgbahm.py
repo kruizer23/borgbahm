@@ -233,7 +233,12 @@ def borg_check_repository():
     result = False
 
     # Check if there is a valid repository, otherwise 'borg init' needs to first be used.
-    cmd = ['borg', 'check', '--repository-only']
+    # Max duration is set to 30 mins per day. When not done, it continues on the next
+    # run. On a backup set of a bit over 1 TB, the full consistency check can take up to
+    # four hours. With the max duration approach, this now takes about 8 days, when run
+    # daily. The max duration time should ideally be fine tuned such that one full 
+    # consistency check completes at least once per month.
+    cmd = ['borg', 'check', '--repository-only', '--max-duration=1800']
     cmd_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode
     logging.debug('Borg check command returned {}'.format(cmd_return))
 
